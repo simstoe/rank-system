@@ -1,6 +1,7 @@
 package dev.simstoe.ranks;
 
 import dev.simstoe.ranks.commands.RankCommand;
+import dev.simstoe.ranks.listener.ChatListener;
 import dev.simstoe.ranks.listener.PlayerJoinListener;
 import dev.simstoe.ranks.listener.RankUpdatedListener;
 import dev.simstoe.ranks.repositories.RankRepository;
@@ -21,6 +22,7 @@ public final class Plugin extends JavaPlugin {
         this.rankRepository = new MySQLRankRepository("localhost", 3306, "network", "root", "test123");
         this.rankService = new RankService(this, this.rankRepository);
 
+        this.getServer().getPluginManager().registerEvents(new ChatListener(this.rankService), this);
         this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         this.getServer().getPluginManager().registerEvents(new RankUpdatedListener(this.rankService), this);
 

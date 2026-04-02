@@ -5,21 +5,15 @@ import dev.simstoe.ranks.models.RankPlayer;
 import dev.simstoe.ranks.models.enums.Rank;
 import dev.simstoe.ranks.repositories.RankRepository;
 import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import org.jspecify.annotations.NonNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 public final class RankService {
@@ -97,21 +91,17 @@ public final class RankService {
         this.plugin.getServer().getPluginManager().callEvent(new RankUpdatedEvent(uuid, oldRank, newRank));
     }
 
-    public void updateTablist(@NonNull Player player) {
+    public void updateTablist(Player player) {
         var rankPlayer = this.playerRank(player.getUniqueId());
         if (rankPlayer == null) {
             return;
         }
 
-        var rawPrefix = rankPlayer.rank().prefix();
+        player.playerListName(this.rankDisplayName(player.getUniqueId(), Component.text(player.getName())));
+    }
 
-        var prefix = (rawPrefix == null || rawPrefix.isBlank())
-                ? rankPlayer.rank().name().toLowerCase()
-                : rawPrefix;
-
-        var component = MiniMessage.miniMessage().deserialize(prefix + " " + player.getName());
-
-        player.playerListName(component);
+    public Component chatDisplayName(UUID uuid, Component playerName) {
+        return this.rankDisplayName(uuid, playerName);
     }
 
     public void updateTablistForAllOnlinePlayers() {
@@ -197,5 +187,19 @@ public final class RankService {
         if (this.forcedOperators.remove(uuid) && player.isOp()) {
             player.setOp(false);
         }
+    }
+
+    private Component rankDisplayName(UUID uuid, Component playerName) {
+        var rankPlayer = this.playerRank(uuid);
+        if (rankPlayer == null) {
+            return playerName;
+        }
+
+        var rawPrefix = rankPlayer.rank().prefix();
+        var prefix = (rawPrefix == null || rawPrefix.isBlank())
+                ? rankPlayer.rank().name().toLowerCase()
+                : rawPrefix;
+
+        return MiniMessage.miniMessage().deserialize(prefix + " ").append(playerName);
     }
 }

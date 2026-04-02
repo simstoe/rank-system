@@ -2,3 +2,10 @@ name: ranks
 version: 1.0
 api-version: 1.21
 main: dev.simstoe.ranks.Plugin
+
+commands:
+  rank:
+
+permissions:
+  ranks.debug:
+    default: op

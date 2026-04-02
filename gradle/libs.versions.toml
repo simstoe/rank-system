@@ -4,12 +4,15 @@ lombok = "1.18.44"
 jetbrains-annotations = "26.0.1"
 
 paper-api = "1.21.11-R0.1-SNAPSHOT"
+hikari-cp = "7.0.2"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
 
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+
+hikari-cp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikari-cp" }
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

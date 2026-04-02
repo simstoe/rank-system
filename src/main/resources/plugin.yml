@@ -1,0 +1,4 @@
+name: ranks
+version: 1.0
+api-version: 1.21
+main: dev.simstoe.ranks.Plugin
